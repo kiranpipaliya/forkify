@@ -14,7 +14,7 @@ import "regenerator-runtime/runtime"; /// poliffing async and await
 
 ///////////////////////////////////////
 
-const showRecepi = async function () {
+const controlRecipe = async function () {
   try {
 
     const id = window.location.hash.slice(1);
@@ -30,17 +30,23 @@ const showRecepi = async function () {
     // Recipe
     recipeView.render(modal.state.recipe);
 
-
-
     console.log(recipe);
   } catch (err) {
-    alert(err)
+    recipeView.randerError();
   }
 }
 
-const events = ['hashchange', 'load']
-console.log(events);
-events.forEach(ev => window.addEventListener(ev, showRecepi));
+const controlLoadResult = async function () {
+  try {
+    await modal.loadSearchResults("pizza");
+    console.log(modal.state.search.results);
+  } catch (err) {
+    console.log("Controller", err);
+  }
+}
+controlLoadResult();
 
-// window.addEventListener("hashchange", showRecepi)
-// window.addEventListener("load", showRecepi())
+const init = function () {
+  recipeView.addHandlerRender(controlRecipe)
+}
+init();
