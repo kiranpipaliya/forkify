@@ -1,8 +1,7 @@
 
 import * as modal from "./modal.js"
 import recipeView from "./view/recipeView.js"
-
-
+import searchView from "./view/searcView.js"
 import "core-js/stable"; // poliffing all code 
 import "regenerator-runtime/runtime"; /// poliffing async and await 
 
@@ -16,9 +15,7 @@ import "regenerator-runtime/runtime"; /// poliffing async and await
 
 const controlRecipe = async function () {
   try {
-
     const id = window.location.hash.slice(1);
-    console.log(id);
     if (!id) return
 
     // Spiner 
@@ -36,17 +33,26 @@ const controlRecipe = async function () {
   }
 }
 
-const controlLoadResult = async function () {
+const controlSearchResults = async function () {
   try {
-    await modal.loadSearchResults("pizza");
+
+
+    const query = searchView.getQuery();
+    console.log(query);
+
+    searchView.clearInput();
+
+    if (!query) return
+    await modal.loadSearchResults(query);
     console.log(modal.state.search.results);
+
   } catch (err) {
     console.log("Controller", err);
   }
 }
-controlLoadResult();
 
 const init = function () {
   recipeView.addHandlerRender(controlRecipe)
+  searchView.addHandlerSearch(controlSearchResults);
 }
 init();
